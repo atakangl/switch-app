@@ -14,10 +14,6 @@ class _MyCardContainerState extends State<MyCardContainer> {
   @override
   void initState() {
     super.initState();
-    loadBloc();
-  }
-
-  loadBloc() async {
     BlocProvider.of<SaveBloc>(context).add(ReadEvent());
   }
 
@@ -30,7 +26,6 @@ class _MyCardContainerState extends State<MyCardContainer> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15))),
         elevation: 8,
-        //margin: EdgeInsets.all(5),
         child: BlocBuilder(
           bloc: BlocProvider.of<SaveBloc>(context),
           builder: (context, SaveState state) {
