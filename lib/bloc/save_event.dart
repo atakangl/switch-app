@@ -11,8 +11,6 @@ class ReadEvent extends SaveEvent {
 
 class SaveAndReadEvent extends SaveEvent {
   final bool value;
-  SaveAndReadEvent({
-    required this.value,
-  });
+  SaveAndReadEvent({required this.value});
   List<Object> get props => [value];
 }
