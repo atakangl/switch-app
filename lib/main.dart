@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: BlocProvider<SaveBloc>(
-              create: (context) => SaveBloc(), child: MyBodyPage()),
+              create: (context) => locator<SaveBloc>()..add(ReadEvent()),
+              child: MyBodyPage()),
         ));
   }
 }

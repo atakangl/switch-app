@@ -1,29 +1,13 @@
 part of 'save_bloc.dart';
 
-abstract class SaveState extends Equatable {
-  const SaveState();
-}
+class SaveState extends Equatable {
+  final Option<CacheData> cacheDataOption;
 
-class SaveInitial extends SaveState {
-  @override
-  List<Object> get props => [];
-}
+  const SaveState({required this.cacheDataOption});
 
-class FirstState extends SaveState {
-  final bool isSwitched;
+  factory SaveState.initial() {
+    return SaveState(cacheDataOption: none());
+  }
 
-  final time;
-
-  FirstState({required this.isSwitched, required this.time});
-
-  List<Object> get props => [isSwitched, time];
-}
-
-class CachedState extends SaveState {
-  final bool isSwitched;
-  final time;
-
-  CachedState({required this.isSwitched, required this.time});
-
-  List<Object> get props => [isSwitched, time];
+  List<Object> get props => [cacheDataOption];
 }

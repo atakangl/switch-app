@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch_app/infrastructure/save_repo.dart';
 import 'package:flutter_switch_app/injectable.dart';
+import 'package:flutter_switch_app/models/cache_data.dart';
 import 'package:flutter_switch_app/models/failure.dart';
 import 'package:dartz/dartz.dart';
 
@@ -12,31 +13,28 @@ part 'save_event.dart';
 part 'save_state.dart';
 
 class SaveBloc extends Bloc<SaveEvent, SaveState> {
-  SaveBloc() : super(SaveInitial());
-  final MyRepo _myRepo = locator<MyRepo>();
+  SaveBloc(this._myRepo) : super(SaveState.initial());
+  final MyRepo _myRepo;
 
   @override
   Stream<SaveState> mapEventToState(SaveEvent event) async* {
     if (event is ReadEvent) {
-      try {
-        Either<Failure, String> now = await _myRepo.readNow();
-        String time = now.fold((l) => 'Hiiii Eitherdan ilk', (r) => r);
-        bool value = await _myRepo.readSwitch();
+      Either<Failure, CacheData> cacheDataOrFailure = await _myRepo.readAll();
 
-        yield FirstState(time: time, isSwitched: value);
-      } catch (e) {
-        debugPrint("HATAA" + e.toString() + state.toString());
-      }
-    } else if (event is SaveAndReadEvent) {
-      try {
-        await _myRepo.saveAll(event.value);
-        Either<Failure, String> now = await _myRepo.readNow();
-        String time = now.fold((l) => 'Hiiii (burası ilk olamaz ki)', (r) => r);
-
-        yield CachedState(isSwitched: event.value, time: time);
-      } catch (e) {
-        debugPrint("HATAA" + e.toString() + state.toString());
-      }
+      yield* cacheDataOrFailure.fold((failure) async* {
+        yield SaveState(
+          cacheDataOption: some(CacheData.initial("Hi", false)),
+        );
+      }, (cacheData) async* {
+        yield SaveState(
+          cacheDataOption: some(cacheData),
+        );
+      });
+    } else if (event is SaveCacheEvent) {
+      state.cacheDataOption.fold(() => null, (cacheData) async {
+        final failureOrUnit = await _myRepo.saveAll(cacheData);
+        failureOrUnit.fold((failure) => null, (_) => add(ReadEvent()));
+      });
     }
   }
 }

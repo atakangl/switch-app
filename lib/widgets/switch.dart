@@ -13,10 +13,8 @@ class MySwitch extends StatelessWidget {
         inactiveThumbColor: Colors.red.shade300,
         inactiveTrackColor: Colors.red.shade300,
         value: isSwitched,
-        onChanged: (value) {
-          BlocProvider.of<SaveBloc>(context).add(SaveAndReadEvent(
-            value: value,
-          ));
+        onChanged: (_) {
+          BlocProvider.of<SaveBloc>(context).add(SaveCacheEvent());
         });
   }
 }

@@ -9,8 +9,6 @@ class ReadEvent extends SaveEvent {
   List<Object> get props => [];
 }
 
-class SaveAndReadEvent extends SaveEvent {
-  final bool value;
-  SaveAndReadEvent({required this.value});
-  List<Object> get props => [value];
+class SaveCacheEvent extends SaveEvent {
+  SaveCacheEvent();
 }

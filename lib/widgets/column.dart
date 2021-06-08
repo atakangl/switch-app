@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_switch_app/models/cache_data.dart';
 import 'package:flutter_switch_app/widgets/switch.dart';
 import 'package:flutter_switch_app/widgets/text.dart';
 
 class MyColumn extends StatelessWidget {
-  final bool isSwitched;
-  final String time;
-  const MyColumn({Key? key, required this.isSwitched, required this.time})
-      : super(key: key);
+  final CacheData cacheData;
+  const MyColumn({Key? key, required this.cacheData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +13,8 @@ class MyColumn extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        MyText(time: time),
-        MySwitch(isSwitched: isSwitched),
+        MyText(time: cacheData.now),
+        MySwitch(isSwitched: cacheData.isSwitch),
       ],
     );
   }
